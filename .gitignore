@@ -12,3 +12,24 @@ $RECYCLE.BIN/
 
 # Node.js
 node_modules/
+
+# 小程序编译缓存
+unpackage/
+miniprogram_npm/
+
+# npm依赖
+node_modules/
+
+# 日志
+logs/
+*.log
+
+# 开发者工具本地个性化配置
+project.config.user.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 云开发（如果用了云函数）
+cloudfunctions/node_modules/
