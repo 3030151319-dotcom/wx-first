@@ -1,0 +1,7 @@
+<!-- components/mt-sheet/mt-sheet.wxml -->
+<view wx:if="{{innerShow}}">
+  <view class="mask {{closing ? 'closing' : ''}}" bindtap="onMask"></view>
+  <view class="sheet {{sheetClass}} {{closing ? 'closing' : ''}}">
+    <slot></slot>
+  </view>
+</view>

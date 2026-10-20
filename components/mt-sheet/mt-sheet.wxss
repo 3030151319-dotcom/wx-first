@@ -1,0 +1,2 @@
+/* components/mt-sheet/mt-sheet.wxss
+   .mask / .sheet 及淡入淡出动画统一复用 app.wxss（styleIsolation: apply-shared），此处无需重复定义。 */

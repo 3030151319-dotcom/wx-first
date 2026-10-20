@@ -1,0 +1,66 @@
+/* pages/cart/cart.wxss */
+.cart-page { padding: 20rpx; }
+
+.cart-shop {
+  background: var(--card); border-radius: var(--r-lg); padding: 20rpx 24rpx; margin-bottom: 20rpx;
+  box-shadow: var(--shadow-sm); transition: transform 0.12s ease, background 0.12s ease;
+}
+.cart-shop-head { display: flex; align-items: center; padding-bottom: 12rpx; border-bottom: 1rpx solid var(--line); }
+.cs-name { font-size: 30rpx; font-weight: bold; }
+
+.cart-item { display: flex; align-items: center; padding: 20rpx 0; border-bottom: 1rpx solid #f5f5f5; }
+.ci-pic { width: 100rpx; height: 100rpx; border-radius: var(--r-sm); overflow: hidden; background: #f3f3f3; margin-right: 18rpx; flex-shrink: 0; }
+.ci-pic-img { width: 100%; height: 100%; display: block; }
+.ci-info { flex: 1; min-width: 0; }
+.ci-name { font-size: 28rpx; }
+.ci-spec { font-size: 22rpx; color: var(--sub); margin: 4rpx 0; }
+.ci-price { font-size: 28rpx; color: var(--theme); font-weight: bold; margin-top: 8rpx; }
+.ci-right { display: flex; flex-direction: column; align-items: flex-end; }
+.ci-del { font-size: 22rpx; color: var(--sub); margin-top: 10rpx; }
+
+/* 自定义勾选框 */
+.checkbox {
+  width: 40rpx; height: 40rpx; border-radius: 50%; border: 2rpx solid #ccc;
+  margin-right: 16rpx; flex-shrink: 0; position: relative;
+}
+.checkbox.checked { background: var(--theme); border-color: var(--theme); }
+.checkbox.checked::after {
+  content: ''; position: absolute; left: 13rpx; top: 7rpx; width: 10rpx; height: 18rpx;
+  border-right: 4rpx solid #fff; border-bottom: 4rpx solid #fff; transform: rotate(45deg);
+}
+
+/* 费用明细 */
+.fee-card { background: var(--card); border-radius: var(--r-lg); padding: 10rpx 24rpx; margin-bottom: 20rpx; box-shadow: var(--shadow-sm); }
+.fee-row { display: flex; justify-content: space-between; font-size: 26rpx; color: #555; padding: 18rpx 0; border-bottom: 1rpx solid #f5f5f5; }
+.fee-row:last-child { border-bottom: none; }
+.fee-link { color: var(--theme); }
+
+/* 结算栏 */
+.checkout-bar { position: fixed; left: 0; right: 0; bottom: 0; height: 100rpx; background: var(--card); display: flex; align-items: center; padding: 0 20rpx; border-top: 1rpx solid #eee; }
+.cb-check { width: 40rpx; height: 40rpx; border-radius: 50%; border: 2rpx solid #ccc; margin-right: 12rpx; position: relative; }
+.cb-check.checked { background: var(--theme); border-color: var(--theme); }
+.cb-check.checked::after { content: ''; position: absolute; left: 13rpx; top: 7rpx; width: 10rpx; height: 18rpx; border-right: 4rpx solid #fff; border-bottom: 4rpx solid #fff; transform: rotate(45deg); }
+.cb-left { flex: 1; display: flex; align-items: baseline; }
+.cb-price { font-size: 36rpx; font-weight: bold; color: var(--theme); }
+.cb-tip { font-size: 24rpx; color: var(--sub); margin-left: 14rpx; }
+.cb-btn { background: var(--theme); color: #fff; font-size: 30rpx; padding: 0 60rpx; height: 100rpx; line-height: 100rpx; }
+
+/* 优惠券弹窗 */
+.coupon-sheet { padding-bottom: env(safe-area-inset-bottom); }
+.coupon-body { max-height: 50vh; padding: 0 24rpx; }
+.cp-row { display: flex; align-items: center; padding: 24rpx 0; border-bottom: 1rpx solid var(--line); }
+.cp-left { width: 160rpx; text-align: center; border-right: 1rpx dashed #eee; }
+.cp-amt { display: block; font-size: 40rpx; color: var(--theme); font-weight: bold; }
+.cp-cond { display: block; font-size: 20rpx; color: var(--sub); }
+.cp-mid { flex: 1; padding-left: 24rpx; }
+.cp-title { font-size: 28rpx; }
+.cp-exp { font-size: 22rpx; color: var(--sub); margin-top: 6rpx; }
+.cp-pick { background: var(--theme); color: #fff; font-size: 24rpx; padding: 10rpx 24rpx; border-radius: 30rpx; }
+.cp-pick.on { background: #ccc; }
+.cp-none { text-align: center; color: var(--sub); font-size: 26rpx; padding: 30rpx; }
+
+/* 售罄 / 跨店置灰 */
+.cart-item.sold { opacity: 0.55; }
+.ci-sold { font-size: 22rpx; color: var(--sub); }
+.checkbox.disabled { border-color: #eee; background: #f5f5f5; }
+.cb-btn.disabled { background: #ccc; }

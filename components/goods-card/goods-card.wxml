@@ -1,0 +1,18 @@
+<!-- components/goods-card/goods-card.wxml -->
+<view class="goods-item {{goods.soldOut ? 'soldout' : ''}}">
+  <view class="goods-pic"><image class="goods-pic-img" src="{{goods.img}}" mode="aspectFill" lazy-load="{{true}}" /></view>
+  <view class="goods-info">
+    <view class="goods-name ellipsis">{{goods.name}}</view>
+    <view class="goods-desc ellipsis">{{goods.desc}}</view>
+    <view class="goods-sales">月售{{goods.sales}} · 好评{{goods.praise}}%</view>
+    <view class="goods-bottom">
+      <text class="goods-price">¥{{goods.price}}</text>
+      <view class="stepper">
+        <view wx:if="{{count > 0}}" class="step-btn minus" hover-class="btn-scale" bindtap="onMinus">−</view>
+        <text wx:if="{{count > 0}}" class="step-count">{{count}}</text>
+        <view class="step-btn plus" hover-class="btn-scale" bindtap="onAdd">＋</view>
+      </view>
+    </view>
+    <view wx:if="{{goods.soldOut}}" class="soldout-mask">已售罄</view>
+  </view>
+</view>

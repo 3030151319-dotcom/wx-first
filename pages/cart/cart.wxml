@@ -1,0 +1,81 @@
+<!-- pages/cart/cart.wxml -->
+<!-- 购物车：勾选/全选、增减/删除、满减/配送费/优惠券实时优惠、结算；空状态与优惠券弹窗组件化 -->
+<view class="cart-page page-enter">
+  <block wx:if="{{shops.length > 0}}">
+    <view wx:for="{{shops}}" wx:key="shopId" wx:for-item="s" class="cart-shop">
+      <!-- 店铺勾选头 -->
+      <view class="cart-shop-head">
+        <view class="checkbox {{s.allChecked ? 'checked' : ''}}" data-shop="{{s.shopId}}" bindtap="toggleShop"></view>
+        <text class="cs-name">🏪 {{s.shopName}}</text>
+      </view>
+      <!-- 商品 -->
+      <view wx:for="{{s.items}}" wx:key="key" wx:for-item="it" class="cart-item {{it.soldOut ? 'sold' : ''}}">
+        <view class="checkbox {{it.checked ? 'checked' : ''}} {{it.soldOut ? 'disabled' : ''}}" data-shop="{{s.shopId}}" data-key="{{it.key}}" bindtap="toggleItem"></view>
+        <view class="ci-pic"><image class="ci-pic-img" src="{{it.img}}" mode="aspectFill" lazy-load="{{true}}" /></view>
+        <view class="ci-info">
+          <view class="ci-name ellipsis">{{it.name}}</view>
+          <view wx:if="{{it.specText}}" class="ci-spec">{{it.specText}}</view>
+          <view class="ci-price">¥{{it.price}}</view>
+        </view>
+        <view class="ci-right">
+          <block wx:if="{{it.soldOut}}">
+            <text class="ci-sold">已售罄</text>
+          </block>
+          <view wx:else class="stepper">
+            <view class="step-btn minus" hover-class="btn-scale" data-shop="{{s.shopId}}" data-key="{{it.key}}" bindtap="minus">−</view>
+            <text class="step-count">{{it.count}}</text>
+            <view class="step-btn plus" hover-class="btn-scale" data-shop="{{s.shopId}}" data-key="{{it.key}}" bindtap="add">＋</view>
+          </view>
+          <text class="ci-del" data-shop="{{s.shopId}}" data-key="{{it.key}}" bindtap="remove">删除</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 费用明细 -->
+    <view class="fee-card">
+      <view class="fee-row"><text>商品金额</text><text>¥{{goodsTotal}}</text></view>
+      <view class="fee-row" wx:if="{{manjianTotal > 0}}"><text>店铺满减</text><text class="mt-red">-¥{{manjianTotal}}</text></view>
+      <view class="fee-row"><text>配送费</text><text>¥{{deliveryFeeTotal}}</text></view>
+      <view class="fee-row" bindtap="openCoupon">
+        <text>优惠券</text>
+        <text wx:if="{{coupon}}" class="mt-red">-¥{{couponAmount}}（{{coupon.title}}）›</text>
+        <text wx:else class="fee-link">{{couponList.length > 0 ? '请选择 ›' : '无可用'}}</text>
+      </view>
+    </view>
+    <view class="bottom-space"></view>
+  </block>
+
+  <mt-empty wx:else icon="🛒" text="购物车还是空的" btn-text="去逛逛" show-btn="{{true}}" bind:btn="goHome" />
+</view>
+
+<!-- 结算栏 -->
+<view wx:if="{{shops.length > 0}}" class="checkout-bar">
+  <view class="cb-check {{allChecked ? 'checked' : ''}}" bindtap="toggleAll"></view>
+  <view class="cb-left">
+    <text class="cb-price">¥{{payTotal}}</text>
+    <text class="cb-tip">共{{totalCount}}件</text>
+  </view>
+  <view class="cb-btn {{crossShop ? 'disabled' : ''}}" bindtap="checkout">去结算</view>
+</view>
+
+<!-- 优惠券弹窗（mt-sheet：遮罩 + 上滑淡入 / 下滑淡出） -->
+<mt-sheet show="{{couponSheet}}" sheet-class="coupon-sheet" bind:maskclose="closeCoupon">
+  <view class="sheet-head">
+    <text class="sheet-title">选择优惠券</text>
+    <text class="sheet-close" bindtap="closeCoupon">×</text>
+  </view>
+  <scroll-view class="coupon-body" scroll-y="true">
+    <view wx:for="{{couponList}}" wx:key="id" class="cp-row" data-coupon="{{item}}" bindtap="pickCoupon">
+      <view class="cp-left">
+        <text class="cp-amt">¥{{item.amount}}</text>
+        <text class="cp-cond">{{item.condition === 0 ? '无门槛' : '满' + item.condition + '可用'}}</text>
+      </view>
+      <view class="cp-mid">
+        <view class="cp-title">{{item.title}}</view>
+        <view class="cp-exp">有效期至 {{item.expire}}</view>
+      </view>
+      <view class="cp-pick {{coupon && coupon.id === item.id ? 'on' : ''}}">{{coupon && coupon.id === item.id ? '已选' : '立即使用'}}</view>
+    </view>
+    <view class="cp-none" data-coupon="" bindtap="clearCoupon">不使用优惠券</view>
+  </scroll-view>
+</mt-sheet>

@@ -1,0 +1,36 @@
+<!-- pages/review/review.wxml -->
+<view class="review-page page-enter">
+  <view class="rv-card">
+    <!-- 待评价商品 -->
+    <view wx:for="{{order.shops}}" wx:key="shopName" wx:for-item="s" class="rv-shop">
+      <view class="rv-shop-name">🏪 {{s.shopName}}</view>
+      <view wx:for="{{s.items}}" wx:key="key" wx:for-item="it" class="rv-item">
+        <image class="rv-img" src="{{it.img}}" mode="aspectFill" lazy-load="{{true}}" />
+        <view class="rv-name ellipsis">{{it.name}}</view>
+        <view class="rv-qty">×{{it.count}}</view>
+      </view>
+    </view>
+
+    <!-- 星级 -->
+    <view class="rv-stars">
+      <text class="rv-stars-label">评分</text>
+      <view class="stars">
+        <text wx:for="{{5}}" wx:key="*this" class="star {{stars >= (index+1) ? 'on' : ''}}" data-n="{{index+1}}" bindtap="setStars">★</text>
+      </view>
+    </view>
+
+    <!-- 文字 -->
+    <textarea class="rv-text" placeholder="说说这次的体验吧~" value="{{text}}" bindinput="onText" maxlength="200"></textarea>
+
+    <!-- 图片 -->
+    <view class="rv-imgs">
+      <view wx:for="{{images}}" wx:key="*this" class="rv-img-item">
+        <image class="rv-img-pic" src="{{item}}" mode="aspectFill" />
+        <text class="rv-img-del" data-i="{{index}}" bindtap="removeImage">×</text>
+      </view>
+      <view wx:if="{{images.length < 3}}" class="rv-img-add" hover-class="btn-scale" bindtap="chooseImage">＋</view>
+    </view>
+  </view>
+
+  <view class="rv-submit {{submitted ? 'disabled' : ''}}" hover-class="btn-scale" bindtap="submit">{{submitted ? '已评价' : '提交评价'}}</view>
+</view>

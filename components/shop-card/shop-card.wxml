@@ -1,0 +1,22 @@
+<!-- components/shop-card/shop-card.wxml -->
+<view class="shop-card" hover-class="press-card" bindtap="onTap">
+  <view class="shop-cover">
+    <image class="shop-cover-img" src="{{shop.img}}" mode="aspectFill" lazy-load="{{true}}" />
+  </view>
+  <view class="shop-info">
+    <view class="shop-name ellipsis">{{shop.name}}</view>
+    <view class="shop-meta">
+      <text wx:if="{{shop.rating}}" class="rating">★ {{shop.rating}}</text>
+      <text wx:if="{{shop.monthSales}}" class="sales">月售{{shop.monthSales}}</text>
+      <text wx:if="{{shop.distance}}" class="distance">{{shop.distance}}km</text>
+    </view>
+    <view wx:if="{{shop.activities && shop.activities.length}}" class="shop-tags">
+      <text wx:for="{{shop.activities}}" wx:for-item="t" wx:key="*this" class="tag">{{t.label}}</text>
+    </view>
+    <view class="shop-delivery">
+      <text class="fee">{{shop.deliveryFee === 0 ? '免配送费' : '配送 ¥' + shop.deliveryFee}}</text>
+      <text wx:if="{{shop.deliveryTime}}" class="time">{{shop.deliveryTime}}分钟</text>
+      <text class="min">起送 ¥{{shop.minOrder}}</text>
+    </view>
+  </view>
+</view>

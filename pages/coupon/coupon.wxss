@@ -1,0 +1,18 @@
+/* pages/coupon/coupon.wxss */
+.coupon-page { padding: 20rpx; min-height: 100vh; }
+
+.tabs { display: flex; background: var(--card); border-radius: var(--r-md); padding: 10rpx 0; margin-bottom: 20rpx; box-shadow: var(--shadow-sm); }
+.tab { flex: 1; text-align: center; font-size: 28rpx; color: #666; padding: 18rpx 0; position: relative; }
+.tab.active { color: var(--theme); font-weight: bold; }
+.tab.active::after { content: ''; position: absolute; left: 50%; bottom: 4rpx; transform: translateX(-50%); width: 40rpx; height: 4rpx; background: var(--theme); border-radius: 2rpx; }
+
+.cp-list { padding-bottom: 20rpx; }
+.cp-card { display: flex; align-items: center; background: var(--card); border-radius: var(--r-md); margin-bottom: 20rpx; overflow: hidden; box-shadow: var(--shadow-sm); }
+.cp-card.disabled { filter: grayscale(1); opacity: 0.6; }
+.cp-left { width: 200rpx; text-align: center; border-right: 1rpx dashed #eee; padding: 36rpx 0; }
+.cp-amt { display: block; font-size: 52rpx; color: var(--theme); font-weight: bold; }
+.cp-cond { display: block; font-size: 22rpx; color: var(--sub); margin-top: 6rpx; }
+.cp-mid { flex: 1; padding-left: 28rpx; }
+.cp-title { font-size: 30rpx; font-weight: bold; }
+.cp-exp { font-size: 22rpx; color: var(--sub); margin-top: 10rpx; }
+.cp-state { font-size: 24rpx; color: var(--theme); padding: 0 28rpx; }

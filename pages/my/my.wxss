@@ -1,0 +1,30 @@
+/* pages/my/my.wxss */
+.my-page { background: var(--bg); min-height: 100vh; }
+
+.my-header { background: linear-gradient(180deg, var(--theme) 0%, var(--theme-light) 100%); display: flex; align-items: center; padding: 50rpx 40rpx; }
+.avatar-btn { padding: 0; margin: 0; background: transparent; line-height: normal; border: none; }
+.avatar-btn::after { border: none; }
+.avatar {
+  width: 110rpx; height: 110rpx; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 60rpx; margin-right: 24rpx; overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.my-info { flex: 1; min-width: 0; color: #fff; }
+.my-name-input { font-size: 36rpx; font-weight: bold; color: #fff; height: 50rpx; }
+.my-name-input::-webkit-input-placeholder { color: rgba(255,255,255,0.85); }
+.my-sub { font-size: 24rpx; margin-top: 8rpx; opacity: 0.9; }
+
+.my-grid { background: var(--card); display: flex; padding: 30rpx 0; margin: 20rpx; border-radius: var(--r-lg); position: relative; box-shadow: var(--shadow-sm); }
+.grid-item { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; transition: background 0.12s ease; }
+.gi-icon { font-size: 48rpx; }
+.gi-text { font-size: 24rpx; color: #555; margin-top: 10rpx; }
+.gi-badge { position: absolute; top: -6rpx; right: 40rpx; background: #fff; color: var(--theme); border: 1rpx solid var(--theme); font-size: 18rpx; min-width: 28rpx; height: 28rpx; line-height: 28rpx; border-radius: 14rpx; text-align: center; padding: 0 4rpx; }
+
+.my-list { background: var(--card); margin: 20rpx; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+.list-row { display: flex; justify-content: space-between; align-items: center; padding: 30rpx 24rpx; border-bottom: 1rpx solid var(--line); transition: background 0.12s ease; }
+.list-row:last-child { border-bottom: none; }
+.lr-left { font-size: 28rpx; color: #333; }
+.arrow { font-size: 36rpx; color: #ccc; }
+
+/* 行按压反馈 */
+.press-row { background: #fafafa; }

@@ -1,0 +1,99 @@
+<!-- pages/confirm/confirm.wxml -->
+<!-- 确认下单：地址 / 配送时间 / 备注 / 商品清单 / 费用明细 / 优惠券（弹窗淡入淡出） / 模拟支付 -->
+<view class="confirm-page page-enter">
+  <!-- 收货地址 -->
+  <view class="addr-card" hover-class="press-card" bindtap="chooseAddress">
+    <text class="addr-icon">📍</text>
+    <view class="addr-info" wx:if="{{address}}">
+      <view class="addr-line1"><text class="addr-name">{{address.name}}</text><text class="addr-phone">{{address.phone}}</text><text wx:if="{{address.tag}}" class="addr-tag">{{address.tag}}</text></view>
+      <view class="addr-detail ellipsis">{{address.detail}}</view>
+    </view>
+    <view class="addr-info" wx:else>
+      <view class="addr-empty">请选择收货地址</view>
+    </view>
+    <text class="arrow">›</text>
+  </view>
+
+  <!-- 商品清单（按店铺） -->
+  <view class="block">
+    <view wx:for="{{orderShops}}" wx:key="shopId" wx:for-item="s" class="order-shop">
+      <view class="os-name">🏪 {{s.shopName}}</view>
+      <view wx:for="{{s.items}}" wx:key="key" wx:for-item="it" class="os-item">
+        <image class="os-img" src="{{it.img}}" mode="aspectFill" lazy-load="{{true}}" />
+        <view class="os-info">
+          <view class="os-gname ellipsis">{{it.name}}</view>
+          <view wx:if="{{it.specText}}" class="os-spec">{{it.specText}}</view>
+        </view>
+        <view class="os-qty">×{{it.count}}</view>
+        <view class="os-price">¥{{it.price * it.count}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 配送时间 -->
+  <view class="block row" bindtap="pickDelivery">
+    <text class="row-label">配送时间</text>
+    <view class="row-right">{{deliveryTime}} <text class="arrow">›</text></view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="block remark-row">
+    <text class="row-label">订单备注</text>
+    <input class="remark-input" placeholder="口味、偏好等（选填）" value="{{remark}}" bindinput="onRemark" />
+  </view>
+
+  <!-- 费用明细 -->
+  <view class="block fee-card">
+    <view class="fee-row"><text>商品金额</text><text>¥{{goodsTotal}}</text></view>
+    <view class="fee-row" wx:if="{{manjianTotal > 0}}"><text>店铺满减</text><text class="mt-red">-¥{{manjianTotal}}</text></view>
+    <view class="fee-row"><text>配送费</text><text>¥{{deliveryFeeTotal}}</text></view>
+    <view class="fee-row" bindtap="openCoupon">
+      <text>优惠券</text>
+      <text wx:if="{{coupon}}" class="mt-red">-¥{{couponAmount}}（{{coupon.title}}）›</text>
+      <text wx:else class="fee-link">{{couponList.length > 0 ? '请选择 ›' : '无可用'}}</text>
+    </view>
+  </view>
+
+  <view class="bottom-space"></view>
+</view>
+
+<!-- 提交栏 -->
+<view class="submit-bar">
+  <view class="sb-left">
+    <text class="sb-price">¥{{payTotal}}</text>
+    <text class="sb-tip">共{{totalCount}}件</text>
+  </view>
+  <view class="sb-btn" hover-class="btn-scale" bindtap="submit">提交订单</view>
+</view>
+
+<!-- 优惠券弹窗（mt-sheet：遮罩 + 上滑淡入 / 下滑淡出） -->
+<mt-sheet show="{{couponSheet}}" sheet-class="coupon-sheet" bind:maskclose="closeCoupon">
+  <view class="sheet-head">
+    <text class="sheet-title">选择优惠券</text>
+    <text class="sheet-close" bindtap="closeCoupon">×</text>
+  </view>
+  <scroll-view class="coupon-body" scroll-y="true">
+    <view wx:for="{{couponList}}" wx:key="id" class="cp-row" data-coupon="{{item}}" bindtap="pickCoupon">
+      <view class="cp-left">
+        <text class="cp-amt">¥{{item.amount}}</text>
+        <text class="cp-cond">{{item.condition === 0 ? '无门槛' : '满' + item.condition + '可用'}}</text>
+      </view>
+      <view class="cp-mid">
+        <view class="cp-title">{{item.title}}</view>
+        <view class="cp-exp">有效期至 {{item.expire}}</view>
+      </view>
+      <view class="cp-pick {{coupon && coupon.id === item.id ? 'on' : ''}}">{{coupon && coupon.id === item.id ? '已选' : '立即使用'}}</view>
+    </view>
+    <view class="cp-none" bindtap="clearCoupon">不使用优惠券</view>
+  </scroll-view>
+</mt-sheet>
+
+<!-- 模拟微信支付弹窗（缩放淡入 / 淡出） -->
+<view wx:if="{{payModal || payClosing}}" class="mask {{payClosing ? 'closing' : ''}}" bindtap="payCancel"></view>
+<view wx:if="{{payModal || payClosing}}" class="pay-modal {{payClosing ? 'closing' : ''}}">
+  <view class="pay-title">微信支付</view>
+  <view class="pay-amount">¥{{payTotal}}</view>
+  <view class="pay-tip">美团外卖 Demo · 模拟支付环境</view>
+  <view class="pay-btn" hover-class="btn-scale" bindtap="paySuccess">立即支付</view>
+  <view class="pay-cancel" bindtap="payCancel">取消</view>
+</view>

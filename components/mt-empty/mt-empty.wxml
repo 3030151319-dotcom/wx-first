@@ -1,0 +1,6 @@
+<!-- components/mt-empty/mt-empty.wxml -->
+<view class="mt-empty">
+  <view wx:if="{{icon}}" class="mt-empty-icon">{{icon}}</view>
+  <view class="mt-empty-text">{{text}}</view>
+  <view wx:if="{{showBtn && btnText}}" class="mt-empty-btn" hover-class="btn-scale" bindtap="onBtn">{{btnText}}</view>
+</view>

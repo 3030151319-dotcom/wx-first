@@ -1,0 +1,22 @@
+<!-- pages/coupon/coupon.wxml -->
+<view class="coupon-page page-enter">
+  <view class="tabs">
+    <view wx:for="{{tabs}}" wx:key="id" class="tab {{activeTab === item.id ? 'active' : ''}}" data-id="{{item.id}}" bindtap="switchTab">{{item.name}}</view>
+  </view>
+
+  <view wx:if="{{list.length > 0}}" class="cp-list">
+    <view wx:for="{{list}}" wx:key="id" class="cp-card {{item.status !== 'unused' ? 'disabled' : ''}}">
+      <view class="cp-left">
+        <text class="cp-amt">¥{{item.amount}}</text>
+        <text class="cp-cond">{{item.condition === 0 ? '无门槛' : '满' + item.condition + '可用'}}</text>
+      </view>
+      <view class="cp-mid">
+        <view class="cp-title">{{item.title}}</view>
+        <view class="cp-exp">有效期至 {{item.expire}}</view>
+      </view>
+      <view class="cp-state">{{item.status === 'unused' ? '可使用' : (item.status === 'used' ? '已使用' : '已过期')}}</view>
+    </view>
+  </view>
+
+  <mt-empty wx:else icon="🎫" text="暂无{{activeTab === 'unused' ? '未使用' : (activeTab === 'used' ? '已使用' : '已过期')}}的优惠券" />
+</view>

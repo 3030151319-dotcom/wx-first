@@ -1,0 +1,147 @@
+/* app.wxss 全局样式
+   作用：统一外卖橙主题（CSS 变量）、通用布局与组件（标签/按钮/弹窗/加载/骨架/空状态/按压反馈），
+   所有页面共享，减少重复样式。自定义组件已开启 styleIsolation: apply-shared，同样生效。 */
+
+/* ===================== 主题变量（统一全局主题色 / 圆角 / 阴影） ===================== */
+page {
+  /* 主色体系 */
+  --theme: #FF5339;
+  --theme-deep: #E6442C;
+  --theme-light: #FF7A5C;
+  --theme-bg: #FFF1EC;
+  --gold: #FFB800;
+  /* 文本 / 线条 / 背景 */
+  --text: #333333;
+  --sub: #999999;
+  --line: #f2f2f2;
+  --card: #ffffff;
+  --bg: #f5f5f5;
+  /* 圆角 / 阴影（层级感） */
+  --r-lg: 20rpx;
+  --r-md: 16rpx;
+  --r-sm: 12rpx;
+  --shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+  --shadow-sm: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+
+  background: var(--bg);
+  color: var(--text);
+  font-size: 28rpx;
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", Helvetica, sans-serif;
+}
+view, text, input, scroll-view, textarea, button { box-sizing: border-box; }
+
+/* ===================== 主色工具类 ===================== */
+.mt-red { color: var(--theme); }
+.mt-red-bg { background: var(--theme); }
+.mt-gray { color: var(--sub); }
+
+/* ===================== 省略 ===================== */
+.ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ellipsis-2 {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* ===================== 通用卡片 ===================== */
+.card { background: var(--card); border-radius: var(--r-md); }
+
+/* ===================== 优惠标签：满减 / 折扣 ===================== */
+.tag {
+  display: inline-block; font-size: 20rpx; line-height: 28rpx; padding: 0 8rpx;
+  border-radius: 6rpx; margin-right: 10rpx; border: 1rpx solid var(--theme); color: var(--theme);
+}
+.tag.gray { border-color: #bbb; color: var(--sub); }
+
+/* ===================== 主按钮 ===================== */
+.btn-primary {
+  background: var(--theme); color: #fff; font-size: 30rpx; text-align: center;
+  border-radius: 40rpx; padding: 0 40rpx; height: 80rpx; line-height: 80rpx;
+}
+.btn-primary.disabled { background: #ccc; }
+
+/* ===================== 通用空状态（购物车 / 订单 / 优惠券 / 地址 / 搜索无结果 统一使用） ===================== */
+.mt-empty { display: flex; flex-direction: column; align-items: center; padding: 160rpx 40rpx; }
+.mt-empty-icon { font-size: 120rpx; margin-bottom: 20rpx; }
+.mt-empty-text { color: var(--sub); font-size: 28rpx; margin-bottom: 40rpx; }
+.mt-empty-btn {
+  background: var(--theme); color: #fff; padding: 18rpx 60rpx;
+  border-radius: 40rpx; font-size: 28rpx;
+}
+
+/* ===================== 加载动画（转圈） ===================== */
+.loading-wrap { display: flex; justify-content: center; padding: 30rpx; }
+.loading-dot {
+  width: 36rpx; height: 36rpx; border: 4rpx solid #eee; border-top-color: var(--theme);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 列表底部提示（上滑加载更多 / 没有更多） */
+.list-tip { text-align: center; color: var(--sub); font-size: 24rpx; padding: 24rpx; }
+.bottom-space { height: 140rpx; }
+
+/* ===================== 骨架屏（shimmer 微光） ===================== */
+.skeleton { padding: 24rpx; }
+.sk-box { background: #ececec; border-radius: var(--r-md); position: relative; overflow: hidden; }
+.sk-box::after {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 60%;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer { 100% { transform: translateX(220%); } }
+.sk-line { height: 24rpx; margin: 14rpx 0; }
+.sk-round { border-radius: 50%; }
+
+/* ===================== 按压 / 缩放 反馈（hover-class 使用） ===================== */
+/* 卡片按压：轻微缩放 + 底色 */
+.press-card { transform: scale(0.985); background: #fafafa; }
+/* 按钮 / 步进器按压：缩小 */
+.btn-scale { transform: scale(0.82); }
+/* 加购成功 pop */
+.pop { animation: pop 0.28s ease; }
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.25); } 100% { transform: scale(1); } }
+
+/* 页面进入：内容淡入上移（叠加原生导航滑动） */
+.page-enter { animation: pageIn 0.28s ease both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(18rpx); } to { opacity: 1; transform: none; } }
+
+/* ===================== 遮罩 + 底部弹层（规格 / 购物车 / 详情 / 优惠券 通用，含淡入淡出） ===================== */
+.mask {
+  position: fixed; left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5); z-index: 100;
+  animation: maskIn 0.22s ease both;
+}
+@keyframes maskIn { from { opacity: 0; } to { opacity: 1; } }
+.mask.closing { animation: maskOut 0.2s ease both; }
+@keyframes maskOut { to { opacity: 0; } }
+
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); z-index: 101;
+  border-radius: 24rpx 24rpx 0 0; max-height: 80vh; overflow: hidden;
+  display: flex; flex-direction: column;
+  animation: sheetIn 0.26s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+@keyframes sheetIn { from { transform: translateY(100%); opacity: 0.6; } to { transform: translateY(0); opacity: 1; } }
+.sheet.closing { animation: sheetOut 0.2s ease both; }
+@keyframes sheetOut { to { transform: translateY(100%); opacity: 0; } }
+
+.sheet-head { display: flex; align-items: center; padding: 28rpx 24rpx; border-bottom: 1rpx solid var(--line); }
+.sheet-title { flex: 1; font-size: 32rpx; font-weight: bold; }
+.sheet-close { font-size: 44rpx; color: var(--sub); padding: 0 10rpx; }
+
+/* ===================== 步进器（加减数量，集中定义，各页复用） ===================== */
+.stepper { display: flex; align-items: center; }
+.step-btn {
+  width: 48rpx; height: 48rpx; border-radius: 50%; line-height: 44rpx;
+  text-align: center; font-size: 36rpx;
+  transition: transform 0.12s ease;
+}
+.step-btn.plus { background: var(--theme); color: #fff; }
+.step-btn.minus { background: #fff; color: var(--theme); border: 1rpx solid var(--theme); }
+.step-count { min-width: 44rpx; text-align: center; font-size: 28rpx; }
+
+/* ===================== 通用行（我的页等） ===================== */
+.row { display: flex; align-items: center; justify-content: space-between; padding: 30rpx 24rpx; border-bottom: 1rpx solid var(--line); }
+.row:last-child { border-bottom: none; }
+.arrow { font-size: 36rpx; color: #ccc; }

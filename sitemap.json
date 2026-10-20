@@ -1,0 +1,9 @@
+{
+  "desc": "美团外卖 Demo 小程序 sitemap 配置",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+/* components/mt-empty/mt-empty.wxss
+   视觉样式统一复用 app.wxss 的 .mt-empty 系列（styleIsolation: apply-shared），此处无需重复定义。 */

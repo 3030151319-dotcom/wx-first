@@ -1,0 +1,25 @@
+{
+  "description": "美团外卖简易Demo（原生小程序）",
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": ".workbuddy"
+      }
+    ]
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "bigPackageSizeSupport": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.30.4",
+  "appid": "wx3b8cdea09f987a50",
+  "projectname": "meituan-waimai-demo",
+  "miniprogramRoot": "./",
+  "isGameTourist": false
+}

@@ -1,0 +1,63 @@
+<!-- pages/search/search.wxml -->
+<view class="search-page page-enter">
+  <!-- 搜索头部 -->
+  <view class="search-head">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        placeholder="搜索商家、商品"
+        value="{{keyword}}"
+        focus="{{true}}"
+        bindinput="onInput"
+        bindconfirm="doSearch"
+        confirm-type="search"
+      />
+    </view>
+    <view class="cancel" bindtap="doSearch">搜索</view>
+  </view>
+
+  <!-- 联想列表 -->
+  <view wx:if="{{!results && suggest.length > 0}}" class="suggest">
+    <view wx:for="{{suggest}}" wx:key="id" class="sg-item" data-type="{{item.type}}" data-id="{{item.id}}" data-shopId="{{item.shopId}}" bindtap="tapSuggest">
+      <image wx:if="{{item.img}}" class="sg-img" src="{{item.img}}" mode="aspectFill" />
+      <view class="sg-text">
+        <view class="sg-name ellipsis">{{item.name}}</view>
+        <view class="sg-sub ellipsis">{{item.sub}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录 -->
+  <view wx:if="{{!results && suggest.length === 0 && history.length > 0}}" class="history">
+    <view class="his-head">
+      <text>搜索历史</text>
+      <text class="his-clear" bindtap="clearHistory">清空</text>
+    </view>
+    <view class="his-tags">
+      <view wx:for="{{history}}" wx:key="*this" class="his-tag" data-kw="{{item}}" bindtap="tapHistory">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view wx:if="{{results}}" class="results">
+    <mt-empty wx:if="{{results.shops.length === 0 && results.goods.length === 0}}" icon="🔍" text="没有找到「{{keyword}}」相关内容" />
+
+    <view wx:if="{{results.shops.length > 0}}" class="res-section">
+      <view class="res-title">商家</view>
+      <shop-card wx:for="{{results.shops}}" wx:key="id" shop="{{item}}" bind:tap="goShop" />
+    </view>
+
+    <view wx:if="{{results.goods.length > 0}}" class="res-section">
+      <view class="res-title">商品</view>
+      <view wx:for="{{results.goods}}" wx:key="id" class="res-goods" hover-class="press-card" data-id="{{item.shopId}}" bindtap="goShop">
+        <image class="rg-img" src="{{item.img}}" mode="aspectFill" lazy-load="{{true}}" />
+        <view class="rg-info">
+          <view class="rg-name ellipsis">{{item.name}}</view>
+          <view class="rg-sub ellipsis">{{item.shopName}}</view>
+          <view class="rg-price">¥{{item.price}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

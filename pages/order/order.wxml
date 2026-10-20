@@ -1,0 +1,92 @@
+<!-- pages/order/order.wxml -->
+<!-- 订单列表：状态标签切换 + 卡片（按压） + 详情弹层（淡入淡出） + 骨架屏 + 各类操作 -->
+<view class="order-page page-enter">
+  <!-- 首屏骨架屏 -->
+  <view wx:if="{{skeleton}}" class="sk-page">
+    <view class="sk-box sk-tabs"></view>
+    <view class="sk-box sk-card"></view>
+    <view class="sk-box sk-card"></view>
+    <view class="sk-box sk-card"></view>
+  </view>
+
+  <block wx:else>
+    <!-- 状态标签 -->
+    <view class="tabs">
+      <view wx:for="{{tabs}}" wx:key="id" class="tab {{activeTab === item.id ? 'active' : ''}}" data-id="{{item.id}}" bindtap="switchTab">{{item.name}}</view>
+    </view>
+
+    <view wx:if="{{orders.length > 0}}" class="list">
+      <view wx:for="{{orders}}" wx:key="id" wx:for-item="o" class="order-card" data-id="{{o.id}}" bindtap="showDetail">
+        <view class="order-head">
+          <text class="order-id">订单号 {{o.id}}</text>
+          <view class="oh-right">
+            <text class="order-status">{{o.status}}</text>
+            <text wx:if="{{o.remainText}}" class="order-remain">剩 {{o.remainText}}</text>
+          </view>
+        </view>
+        <view wx:for="{{o.shops}}" wx:key="shopName" wx:for-item="s" class="order-shop">
+          <view class="os-name">🏪 {{s.shopName}}</view>
+          <view wx:for="{{s.items}}" wx:key="key" wx:for-item="it" class="os-item">
+            <text class="os-goods ellipsis">{{it.name}} ×{{it.count}}</text>
+            <text class="os-price">¥{{it.price * it.count}}</text>
+          </view>
+        </view>
+        <view class="order-foot">
+          <text class="order-time">{{o.time}}</text>
+          <view class="of-right">
+            <text class="order-total">合计 ¥{{o.payTotal}}</text>
+            <view class="order-ops">
+              <text wx:if="{{o.status === '待付款'}}" class="op op-pay" data-id="{{o.id}}" catchtap="payOrder">去支付</text>
+              <text wx:if="{{o.status === '待付款'}}" class="op" data-id="{{o.id}}" catchtap="cancelOrder">取消</text>
+              <text wx:if="{{o.status === '待配送'}}" class="op op-pay" data-id="{{o.id}}" catchtap="confirmReceipt">确认收货</text>
+              <text wx:if="{{o.status === '已完成' && !o.review}}" class="op op-pay" data-id="{{o.id}}" catchtap="goReview">去评价</text>
+              <text wx:if="{{o.status === '已完成' || o.status === '已取消'}}" class="op" data-id="{{o.id}}" catchtap="deleteOrder">删除</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{hasMore}}" class="list-tip">上滑加载更多</view>
+      <view wx:else class="list-tip">没有更多了~</view>
+    </view>
+
+    <mt-empty wx:else icon="📦" text="暂无订单" btn-text="去下单" show-btn="{{true}}" bind:btn="goHome" />
+  </block>
+</view>
+
+<!-- 订单详情弹层（mt-sheet：遮罩 + 上滑淡入 / 下滑淡出） -->
+<mt-sheet show="{{detailShow}}" sheet-class="detail-sheet" bind:maskclose="closeDetail">
+  <view class="sheet-head">
+    <text class="sheet-title">订单详情</text>
+    <text class="sheet-close" bindtap="closeDetail">×</text>
+  </view>
+  <scroll-view class="detail-body" scroll-y="true" wx:if="{{detailOrder}}">
+    <view class="d-status">状态：<text class="mt-red">{{detailOrder.status}}</text></view>
+    <view class="d-sec">
+      <view class="d-sec-title">配送信息</view>
+      <view class="d-line" wx:if="{{detailOrder.address}}">{{detailOrder.address.name}} {{detailOrder.address.phone}}</view>
+      <view class="d-line" wx:if="{{detailOrder.address}}">{{detailOrder.address.detail}}</view>
+      <view class="d-line">配送时间：{{detailOrder.deliveryTime}}</view>
+      <view class="d-line" wx:if="{{detailOrder.remark}}">备注：{{detailOrder.remark}}</view>
+    </view>
+    <view class="d-sec">
+      <view class="d-sec-title">商品清单</view>
+      <view wx:for="{{detailOrder.shops}}" wx:key="shopName" wx:for-item="s" class="d-shop">
+        <view class="d-shop-name">🏪 {{s.shopName}}</view>
+        <view wx:for="{{s.items}}" wx:key="key" wx:for-item="it" class="d-item">
+          <text class="d-gname ellipsis">{{it.name}}<text wx:if="{{it.specText}}" class="d-spec">（{{it.specText}}）</text></text>
+          <text class="d-gqty">×{{it.count}}</text>
+          <text class="d-gprice">¥{{it.price * it.count}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="d-sec">
+      <view class="d-sec-title">费用明细</view>
+      <view class="d-line">商品金额：¥{{detailOrder.goodsTotal}}</view>
+      <view class="d-line" wx:if="{{detailOrder.manjianTotal > 0}}">店铺满减：-¥{{detailOrder.manjianTotal}}</view>
+      <view class="d-line">配送费：¥{{detailOrder.deliveryFeeTotal}}</view>
+      <view class="d-line" wx:if="{{detailOrder.couponAmount > 0}}">优惠券：-¥{{detailOrder.couponAmount}}</view>
+      <view class="d-line d-pay">实付：¥{{detailOrder.payTotal}}</view>
+    </view>
+    <view class="d-time">下单时间：{{detailOrder.time}}</view>
+  </scroll-view>
+</mt-sheet>

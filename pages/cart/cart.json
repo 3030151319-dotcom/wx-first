@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "购物车",
+  "usingComponents": {
+    "mt-empty": "/components/mt-empty/mt-empty",
+    "mt-sheet": "/components/mt-sheet/mt-sheet"
+  }
+}

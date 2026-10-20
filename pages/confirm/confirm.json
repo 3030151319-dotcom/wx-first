@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "确认订单",
+  "usingComponents": {
+    "mt-sheet": "/components/mt-sheet/mt-sheet"
+  }
+}

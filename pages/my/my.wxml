@@ -1,0 +1,62 @@
+<!-- pages/my/my.wxml -->
+<!-- 个人中心：头像/昵称、订单快捷、收货地址、优惠券、客服 -->
+<view class="my-page page-enter">
+  <view class="my-header">
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image wx:if="{{user.avatar}}" class="avatar" src="{{user.avatar}}" mode="aspectFill" />
+      <view wx:else class="avatar">🧑</view>
+    </button>
+    <view class="my-info">
+      <input class="my-name-input" type="nickname" placeholder="点击设置昵称" value="{{user.nickName}}" bindblur="onNickname" />
+      <view class="my-sub">欢迎使用美团外卖 Demo</view>
+    </view>
+  </view>
+
+  <!-- 我的订单快捷 -->
+  <view class="my-grid">
+    <view class="grid-item" hover-class="press-row" bindtap="goOrder">
+      <text class="gi-icon">📋</text>
+      <text class="gi-text">我的订单</text>
+    </view>
+    <view class="grid-item" hover-class="press-row" bindtap="goAddress">
+      <text class="gi-icon">📍</text>
+      <text class="gi-text">收货地址</text>
+    </view>
+    <view class="grid-item" hover-class="press-row" bindtap="goCoupon">
+      <text class="gi-icon">💰</text>
+      <text class="gi-text">红包卡券</text>
+      <text wx:if="{{couponCount > 0}}" class="gi-badge">{{couponCount}}</text>
+    </view>
+    <view class="grid-item" hover-class="press-row" bindtap="goOrder">
+      <text class="gi-icon">⭐</text>
+      <text class="gi-text">我的收藏</text>
+    </view>
+  </view>
+
+  <view class="my-list">
+    <view class="list-row" hover-class="press-row" bindtap="goOrder">
+      <text class="lr-left">📦 我的订单（{{orderCount}}）</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="list-row" hover-class="press-row" bindtap="goAddress">
+      <text class="lr-left">📍 收货地址管理</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="list-row" hover-class="press-row" bindtap="goCoupon">
+      <text class="lr-left">💰 我的优惠券</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="list-row" hover-class="press-row" bindtap="goService">
+      <text class="lr-left">📞 联系客服</text>
+      <text class="arrow">›</text>
+    </view>
+    <view class="list-row">
+      <text class="lr-left">📶 弱网模拟（演示）</text>
+      <switch checked="{{weakNet}}" color="#FF5339" bindchange="onWeakNet" />
+    </view>
+    <view class="list-row" hover-class="press-row" bindtap="goService">
+      <text class="lr-left">ℹ️ 关于美团外卖</text>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,162 @@
+<!-- pages/shop/shop.wxml -->
+<!-- 店铺详情：头部信息 + 公告 + 满减/领券 + 左分类与右商品滚动联动 + 底部购物车栏 + 规格/购物车弹窗（淡入淡出） -->
+<view class="shop-page page-enter" wx:if="{{shop.id && !skeleton}}">
+
+  <!-- 店铺头部 -->
+  <view class="shop-header">
+    <view class="shop-logo-lg"><image class="shop-logo-lg-img" src="{{shop.img}}" mode="aspectFill" /></view>
+    <view class="shop-head-info">
+      <view class="shop-name ellipsis">{{shop.name}}</view>
+      <view class="shop-sub">
+        <text class="rating">★ {{shop.rating}}</text>
+        <text>月售{{shop.monthSales}}</text>
+        <text>{{shop.deliveryTime}}分钟</text>
+      </view>
+      <view class="shop-extra">
+        <text>{{shop.deliveryFee === 0 ? '免配送费' : '配送 ¥' + shop.deliveryFee}}</text>
+        <text>起送 ¥{{shop.minOrder}}</text>
+        <text>{{shop.distance}}km</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 公告 -->
+  <view class="shop-notice">📢 {{shop.notice}}</view>
+
+  <!-- 满减活动 + 领券 -->
+  <view class="shop-promo">
+    <view class="promo-acts">
+      <text wx:for="{{shop.activities}}" wx:key="*this" class="tag">{{item.label}}</text>
+    </view>
+    <view class="promo-coupons">
+      <view wx:for="{{shop.coupons}}" wx:key="id" class="cp-item">
+        <text class="cp-amt">¥{{item.amount}}</text>
+        <text class="cp-cond">满{{item.condition}}可用</text>
+        <view class="cp-btn {{claimed[item.id] ? 'got' : ''}}" data-coupon="{{item}}" bindtap="claimCoupon">
+          {{claimed[item.id] ? '已领' : '领取'}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主体：左分类 + 右商品（滚动联动） -->
+  <view class="body">
+    <scroll-view class="side-cat" scroll-y="true">
+      <view
+        wx:for="{{shop.categories}}"
+        wx:key="id"
+        class="side-item {{activeCat === item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectCat"
+      >{{item.name}}</view>
+    </scroll-view>
+
+    <scroll-view class="goods-area" scroll-y="true" scroll-into-view="{{scrollInto}}" scroll-with-animation="true" bindscroll="onGoodsScroll">
+      <block wx:for="{{shop.categories}}" wx:key="id" wx:for-item="cat">
+        <view class="cat-sec" id="cat-{{cat.id}}">
+          <view class="cat-title">{{cat.name}}</view>
+          <goods-card
+            wx:for="{{goodsMap[cat.id]}}"
+            wx:key="id"
+            wx:for-item="g"
+            goods="{{g}}"
+            count="{{cartCounts[g.id] || 0}}"
+            bind:add="add"
+            bind:minus="minus"
+          />
+        </view>
+      </block>
+      <view class="goods-bottom-space"></view>
+    </scroll-view>
+  </view>
+
+  <!-- 底部购物车栏 -->
+  <view class="cart-bar">
+    <view class="cart-icon {{totalCount > 0 ? 'has' : ''}}" bindtap="toggleCart">
+      <text class="ci-emoji">🛒</text>
+      <text wx:if="{{totalCount > 0}}" class="cart-badge">{{totalCount}}</text>
+    </view>
+    <view class="cart-price">
+      <block wx:if="{{totalCount > 0}}">
+        <text class="price-num">¥{{totalPrice}}</text>
+        <text class="price-sub">另需配送费 ¥{{shop.deliveryFee}}</text>
+      </block>
+      <text wx:else class="price-tip">未选购商品</text>
+    </view>
+    <view class="checkout-btn {{totalCount > 0 ? 'active' : ''}}" bindtap="goConfirm">
+      {{totalCount > 0 ? '去结算' : '¥' + shop.minOrder + ' 起送'}}
+    </view>
+  </view>
+</view>
+
+<!-- 店铺骨架屏 -->
+<view wx:if="{{skeleton}}" class="shop-skeleton">
+  <view class="sk-box sk-head"></view>
+  <view class="sk-row">
+    <view class="sk-box sk-side"></view>
+    <view class="sk-goods">
+      <view class="sk-box sk-gitem"></view>
+      <view class="sk-box sk-gitem"></view>
+      <view class="sk-box sk-gitem"></view>
+    </view>
+  </view>
+</view>
+
+<!-- 购物车悬浮弹窗（mt-sheet：遮罩 + 上滑淡入 / 下滑淡出） -->
+<mt-sheet show="{{cartPopup}}" sheet-class="cart-sheet" bind:maskclose="closeMask">
+  <view class="sheet-head">
+    <text class="sheet-title">已选商品</text>
+    <text class="sheet-clear" bindtap="clearCart">清空</text>
+  </view>
+  <scroll-view class="cart-sheet-body" scroll-y="true">
+    <view wx:for="{{cartItems}}" wx:key="key" class="cs-item">
+      <image class="cs-img" src="{{item.img}}" mode="aspectFill" />
+      <view class="cs-info">
+        <view class="cs-name ellipsis">{{item.name}}</view>
+        <view wx:if="{{item.specText}}" class="cs-spec">{{item.specText}}</view>
+        <view class="cs-price">¥{{item.price}}</view>
+      </view>
+      <view class="stepper">
+        <view class="step-btn minus" hover-class="btn-scale" data-key="{{item.key}}" bindtap="cartMinus">−</view>
+        <text class="step-count">{{item.count}}</text>
+        <view class="step-btn plus" hover-class="btn-scale" data-key="{{item.key}}" bindtap="cartPlus">＋</view>
+      </view>
+    </view>
+  </scroll-view>
+</mt-sheet>
+
+<!-- 规格选择弹窗（mt-sheet） -->
+<mt-sheet show="{{specModal.show}}" sheet-class="spec-sheet" bind:maskclose="closeSpec">
+  <view class="sheet-head">
+    <image class="spec-img" src="{{specModal.goods.img}}" mode="aspectFill" />
+    <view class="spec-head-info">
+      <view class="spec-name ellipsis">{{specModal.goods.name}}</view>
+      <view class="spec-price">¥{{specModal.unitPrice}}</view>
+    </view>
+    <text class="sheet-close" bindtap="closeSpec">×</text>
+  </view>
+  <scroll-view class="spec-body" scroll-y="true">
+    <view wx:for="{{specModal.goods.specs}}" wx:key="name" wx:for-item="sp" wx:for-index="gi" class="spec-group">
+      <view class="spec-group-title">{{sp.name}}</view>
+      <view class="spec-opts">
+        <view
+          wx:for="{{sp.options}}"
+          wx:key="label"
+          wx:for-item="opt"
+          wx:for-index="oi"
+          class="spec-opt {{specModal.selected[gi] === oi ? 'active' : ''}}"
+          data-gi="{{gi}}"
+          data-oi="{{oi}}"
+          bindtap="pickSpec"
+        >{{opt.label}}</view>
+      </view>
+    </view>
+  </scroll-view>
+  <view class="spec-foot">
+    <view class="spec-foot-price">¥{{specModal.unitPrice * specModal.count}}</view>
+    <view class="step-btn minus" hover-class="btn-scale" data-delta="-1" bindtap="specCount">−</view>
+    <text class="step-count">{{specModal.count}}</text>
+    <view class="step-btn plus" hover-class="btn-scale" data-delta="1" bindtap="specCount">＋</view>
+    <view class="spec-add" hover-class="btn-scale" bindtap="confirmSpec">加入购物车</view>
+  </view>
+</mt-sheet>

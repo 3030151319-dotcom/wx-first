@@ -1,0 +1,83 @@
+/* pages/index/index.wxss */
+.home { padding-bottom: 20rpx; }
+
+/* 定位栏 */
+.top-bar {
+  background: linear-gradient(180deg, var(--theme) 0%, var(--theme-light) 100%);
+  padding: 16rpx 24rpx; display: flex; align-items: center; position: relative;
+}
+.location {
+  display: flex; align-items: center; color: #fff; font-size: 30rpx;
+  max-width: 360rpx; position: relative; z-index: 1;
+}
+.loc-icon { margin-right: 6rpx; }
+.loc-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.loc-arrow { margin-left: 6rpx; font-size: 22rpx; }
+.top-title {
+  position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+  text-align: center; color: #fff; font-size: 34rpx; font-weight: bold; pointer-events: none;
+}
+.addr-switch { color: #fff; font-size: 24rpx; z-index: 1; margin-left: 12rpx; opacity: 0.95; }
+
+/* 搜索入口 */
+.search-wrap { background: var(--theme-light); padding: 10rpx 24rpx 20rpx; }
+.search-box {
+  background: #fff; border-radius: 36rpx; height: 68rpx;
+  display: flex; align-items: center; padding: 0 24rpx; box-shadow: var(--shadow-sm);
+}
+.search-icon { color: var(--sub); margin-right: 10rpx; }
+.search-ph { color: var(--sub); font-size: 28rpx; }
+
+/* 横向品类导航 */
+.cat-nav { white-space: nowrap; background: #fff; padding: 20rpx 10rpx; border-bottom: 1rpx solid #f0f0f0; }
+.cat-item { display: inline-flex; flex-direction: column; align-items: center; width: 120rpx; color: #666; }
+.cat-icon { font-size: 44rpx; }
+.cat-name { font-size: 24rpx; margin-top: 6rpx; }
+.cat-item.active { color: var(--theme); font-weight: bold; }
+
+/* 排序栏 */
+.sort-bar { display: flex; background: #fff; padding: 18rpx 0; border-bottom: 1rpx solid #f0f0f0; }
+.sort-item { flex: 1; text-align: center; font-size: 26rpx; color: #666; position: relative; }
+.sort-item.active { color: var(--theme); font-weight: bold; }
+.sort-item.active::after {
+  content: ''; position: absolute; left: 50%; bottom: -14rpx; transform: translateX(-50%);
+  width: 40rpx; height: 4rpx; background: var(--theme); border-radius: 2rpx;
+}
+
+/* 商家列表：双列瀑布，方形大图卡（卡宽=(750-32-16)/2=351rpx，与 360px 方形源图接近 1:1，避免拉伸发虚） */
+.shop-list { background: #f4f4f4; padding: 16rpx 16rpx 0; }
+.shop-cols { display: flex; align-items: flex-start; }
+.col { flex: 1; min-width: 0; }
+.col + .col { margin-left: 16rpx; }
+
+.shop-card {
+  background: #fff; border-radius: var(--r-md); overflow: hidden;
+  margin-bottom: 16rpx; box-shadow: var(--shadow-sm);
+  transition: transform 0.12s ease;
+}
+.shop-cover { width: 100%; height: 351rpx; overflow: hidden; background: #f3f3f3; }
+.shop-cover-img { width: 100%; height: 100%; display: block; }
+.shop-info { padding: 16rpx 18rpx 18rpx; }
+.shop-name { font-size: 28rpx; font-weight: bold; }
+.shop-meta { display: flex; margin: 10rpx 0 8rpx; white-space: nowrap; overflow: hidden; }
+.shop-meta text { font-size: 20rpx; color: var(--sub); margin-right: 12rpx; }
+.shop-meta .rating { color: var(--theme); }
+.shop-tags { margin-bottom: 8rpx; min-height: 26rpx; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shop-tags .tag { font-size: 18rpx; }
+.shop-delivery { display: flex; white-space: nowrap; overflow: hidden; }
+.shop-delivery text { font-size: 20rpx; color: #666; margin-right: 12rpx; }
+.shop-delivery .fee { color: var(--theme); }
+
+/* 骨架屏：双列卡片占位（图 + 两行文字） */
+.sk-item {
+  background: #fff; border-radius: var(--r-md); overflow: hidden;
+  margin-bottom: 16rpx; box-shadow: var(--shadow-sm);
+}
+.sk-cover { height: 351rpx; border-radius: 0; }
+.sk-item .sk-line { margin: 14rpx 18rpx; }
+
+/* 网络异常重试 */
+.net-error { display: flex; flex-direction: column; align-items: center; padding: 160rpx 40rpx; }
+.ne-icon { font-size: 120rpx; margin-bottom: 20rpx; }
+.ne-text { color: var(--sub); font-size: 28rpx; margin-bottom: 40rpx; }
+.ne-btn { background: var(--theme); color: #fff; padding: 18rpx 60rpx; border-radius: 40rpx; font-size: 28rpx; }
